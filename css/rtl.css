@@ -1,0 +1,202 @@
+/**
+ * RTL (Right-to-Left) Stylesheet for Arabic
+ * Loaded when <html dir="rtl"> is set
+ * Works alongside style.css — overrides direction-dependent properties
+ */
+
+/* ── Base ── */
+html[dir="rtl"], html.rtl,
+html[dir="rtl"] body, html.rtl body {
+  direction: rtl;
+  font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html[dir="rtl"] body, html.rtl body {
+  text-align: right;
+}
+
+/* ── Header ── */
+html[dir="rtl"] .header__inner, html.rtl .header__inner {
+  flex-direction: row-reverse !important;
+}
+
+html[dir="rtl"] .header__logo a, html.rtl .header__logo a {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .header__logo-text, html.rtl .header__logo-text {
+  text-align: right;
+}
+
+html[dir="rtl"] .nav__list, html.rtl .nav__list {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .nav__dropdown-menu, html.rtl .nav__dropdown-menu {
+  left: auto;
+  right: 0;
+  text-align: right;
+}
+
+html[dir="rtl"] .nav__mega, html.rtl .nav__mega {
+  left: auto;
+  right: 0;
+}
+
+html[dir="rtl"] .nav__mega-col, html.rtl .nav__mega-col {
+  text-align: right;
+}
+
+html[dir="rtl"] .header__cta, html.rtl .header__cta {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* ── Language Switcher ── */
+html[dir="rtl"] .lang-switcher, html.rtl .lang-switcher {
+  flex-direction: row-reverse;
+}
+html[dir="rtl"] .lang-switcher__btn, html.rtl .lang-switcher__btn {
+  direction: rtl;
+}
+
+/* ── Hero ── */
+html[dir="rtl"] .hero__inner, html.rtl .hero__inner { text-align: right; }
+html[dir="rtl"] .hero__actions, html.rtl .hero__actions { justify-content: flex-start; }
+html[dir="rtl"] .hero__badges, html.rtl .hero__badges { justify-content: flex-start; }
+
+/* ── Sections ── */
+html[dir="rtl"] .section__header, html.rtl .section__header { text-align: right; }
+html[dir="rtl"] .capacity-item, html.rtl .capacity-item { flex-direction: row-reverse; }
+html[dir="rtl"] .special-card, html.rtl .special-card { flex-direction: row-reverse; }
+html[dir="rtl"] .value-card, html.rtl .value-card { flex-direction: row-reverse; }
+html[dir="rtl"] .market-card, html.rtl .market-card { text-align: right; }
+
+/* ── Forms ── */
+html[dir="rtl"] input, html.rtl input,
+html[dir="rtl"] textarea, html.rtl textarea,
+html[dir="rtl"] select, html.rtl select {
+  text-align: right;
+  direction: rtl;
+}
+html[dir="rtl"] .form-group label, html.rtl .form-group label { text-align: right; }
+
+/* ── Buttons ── */
+html[dir="rtl"] .btn--text::after, html.rtl .btn--text::after { content: '←'; margin-left: 0; margin-right: 0.5rem; }
+html[dir="rtl"] .btn--outline-dark::after, html.rtl .btn--outline-dark::after { content: '←'; margin-left: 0; margin-right: 0.3rem; }
+
+/* ── Footer ── */
+html[dir="rtl"] .footer__grid, html.rtl .footer__grid { direction: rtl; }
+html[dir="rtl"] .footer__links ul, html.rtl .footer__links ul,
+html[dir="rtl"] .footer__contact ul, html.rtl .footer__contact ul { padding-right: 0; padding-left: 0; }
+html[dir="rtl"] .footer__contact-icon, html.rtl .footer__contact-icon { margin-right: 0; margin-left: 0.5rem; }
+
+/* ── Page Hero ── */
+html[dir="rtl"] .page-hero, html.rtl .page-hero { text-align: right; }
+html[dir="rtl"] .breadcrumb, html.rtl .breadcrumb { direction: rtl; }
+html[dir="rtl"] .breadcrumb a::after, html.rtl .breadcrumb a::after { content: '‹'; margin: 0 0.3rem; }
+
+/* ── Cards ── */
+html[dir="rtl"] .case-card__body, html.rtl .case-card__body,
+html[dir="rtl"] .news-card__body, html.rtl .news-card__body,
+html[dir="rtl"] .auto-mold-card__body, html.rtl .auto-mold-card__body { text-align: right; }
+html[dir="rtl"] .news-card__date, html.rtl .news-card__date { direction: rtl; }
+
+/* ── Capability Table ── */
+html[dir="rtl"] table, html.rtl table { direction: rtl; }
+html[dir="rtl"] th, html.rtl th { text-align: right; }
+html[dir="rtl"] td, html.rtl td { text-align: right; }
+
+/* ── RFQ Form ── */
+html[dir="rtl"] .rfq-step-indicator, html.rtl .rfq-step-indicator { flex-direction: row-reverse; }
+html[dir="rtl"] .rfq-step__number, html.rtl .rfq-step__number { margin-right: 0; margin-left: 0.5rem; }
+
+/* ── Footer Social Row RTL (reverse icon order) ── */
+html[dir="rtl"] .footer__social-row, html.rtl .footer__social-row { flex-direction: row-reverse; }
+
+/* ── WhatsApp Widget ── */
+html[dir="rtl"] .whatsapp-widget, html.rtl .whatsapp-widget { right: auto; left: 24px; align-items: flex-start; }
+html[dir="rtl"] .whatsapp-widget__btn, html.rtl .whatsapp-widget__btn { flex-direction: row-reverse; }
+
+/* ── Chat Widget RTL ── */
+html[dir="rtl"] .chat-widget, html.rtl .chat-widget { right: auto; left: 24px; }
+html[dir="rtl"] .chat-widget__body, html.rtl .chat-widget__body { text-align: right; }
+html[dir="rtl"] .chat-widget__msg--bot, html.rtl .chat-widget__msg--bot { align-self: flex-end; border-bottom-left-radius: 12px; border-bottom-right-radius: 4px; }
+html[dir="rtl"] .chat-widget__msg--user, html.rtl .chat-widget__msg--user { align-self: flex-start; border-bottom-right-radius: 12px; border-bottom-left-radius: 4px; }
+html[dir="rtl"] .chat-widget__quick-replies, html.rtl .chat-widget__quick-replies { justify-content: flex-end; }
+@media(max-width:768px){
+  html[dir="rtl"] .chat-widget, html.rtl .chat-widget { right: 8px; left: 8px; }
+}
+
+/* ── Quick Message Widget ── */
+html[dir="rtl"] .qm-widget, html.rtl .qm-widget { left: auto; right: 24px; }
+html[dir="rtl"] .qm-widget__popup, html.rtl .qm-widget__popup { left: auto; right: 24px; }
+html[dir="rtl"] .qm-widget__form, html.rtl .qm-widget__form { direction: rtl; text-align: right; }
+html[dir="rtl"] .qm-widget__field label, html.rtl .qm-widget__field label { left: auto; right: var(--space-3); }
+@media(max-width:768px){
+  html[dir="rtl"] .qm-widget, html.rtl .qm-widget { right: 8px; left: auto; }
+  html[dir="rtl"] .qm-widget__popup, html.rtl .qm-widget__popup { right: 8px; left: 8px; }
+}
+
+/* ── About Page ── */
+html[dir="rtl"] .about-intro, html.rtl .about-intro { flex-direction: row-reverse; }
+html[dir="rtl"] .about-intro__content, html.rtl .about-intro__content { text-align: right; }
+
+/* ── Capability Section ── */
+html[dir="rtl"] .capability-section, html.rtl .capability-section { flex-direction: row-reverse; }
+
+/* ── Mega Menu Brand ── */
+html[dir="rtl"] .nav__mega-brand, html.rtl .nav__mega-brand { text-align: center; }
+
+/* ── General Utilities ── */
+html[dir="rtl"] .text-left, html.rtl .text-left { text-align: right !important; }
+html[dir="rtl"] .text-right, html.rtl .text-right { text-align: left !important; }
+html[dir="rtl"] ul, html.rtl ul,
+html[dir="rtl"] ol, html.rtl ol { padding-left: 0; padding-right: 1.5rem; }
+
+/* ── Responsive RTL ── */
+@media (max-width: 1023px) {
+  html[dir="rtl"] .nav--open .nav__list, html.rtl .nav--open .nav__list { text-align: right; }
+  html[dir="rtl"] .nav__mega, html.rtl .nav__mega { right: 0; left: auto; }
+  html[dir="rtl"] .about-intro, html.rtl .about-intro,
+  html[dir="rtl"] .capability-section, html.rtl .capability-section { flex-direction: column; }
+}
+@media (max-width: 767px) {
+  html[dir="rtl"] .header__inner, html.rtl .header__inner { flex-wrap: wrap; }
+  html[dir="rtl"] .nav__toggle, html.rtl .nav__toggle { order: -1; margin-left: auto; margin-right: 0; }
+  html[dir="rtl"] .hero__actions, html.rtl .hero__actions,
+  html[dir="rtl"] .hero__badges, html.rtl .hero__badges { justify-content: center; }
+  html[dir="rtl"] .whatsapp-widget, html.rtl .whatsapp-widget { left: 8px; right: auto; bottom: 16px; }
+}
+
+/* ═══════════════════ RTL: HOMEPAGE VISUAL SECTIONS ═══════════════════ */
+/* Flip cards — RTL rotate direction */
+html[dir="rtl"] .market-card--flip:hover .market-card__flipper,
+html[dir="rtl"] .market-card--flip:focus-within .market-card__flipper,
+html.rtl .market-card--flip:hover .market-card__flipper,
+html.rtl .market-card--flip:focus-within .market-card__flipper{transform:rotateY(-180deg)}
+
+html[dir="rtl"] .special-card--flip:hover .special-card__flipper,
+html[dir="rtl"] .special-card--flip:focus-within .special-card__flipper,
+html.rtl .special-card--flip:hover .special-card__flipper,
+html.rtl .special-card--flip:focus-within .special-card__flipper{transform:rotateY(-180deg)}
+
+/* RTL: front text alignment */
+html[dir="rtl"] .special-card__front, html.rtl .special-card__front{text-align:right}
+html[dir="rtl"] .market-card__front, html.rtl .market-card__front{text-align:center}
+html[dir="rtl"] .market-card__back, html.rtl .market-card__back{text-align:center}
+
+/* RTL: alternating layout — swap even card direction */
+html[dir="rtl"] .special-card--flip:nth-child(even) .special-card__front,
+html.rtl .special-card--flip:nth-child(even) .special-card__front{flex-direction:row}
+
+/* RTL: section background gradient direction */
+html[dir="rtl"] .overlay--dark::before, html.rtl .overlay--dark::before,
+html[dir="rtl"] .overlay--medium::before, html.rtl .overlay--medium::before,
+html[dir="rtl"] .overlay--light::before, html.rtl .overlay--light::before{transform:scaleX(-1)}
+
+/* RTL mobile */
+@media(max-width:768px){
+  html[dir="rtl"] .special-card--flip:nth-child(even) .special-card__front,
+  html.rtl .special-card--flip:nth-child(even) .special-card__front{flex-direction:row}
+}

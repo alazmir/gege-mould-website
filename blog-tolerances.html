@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A practical engineering guide to injection mold tolerances â€” understanding DIN 16742 tolerance grades, what Â±0.02 mm actually means in production, how tolerance specs drive mold cost, and how to write a tolerance callout that is achievable without wasting money.">
+  <meta name="keywords" content="injection mold tolerances, DIN 16742, ISO 20457, plastic part tolerance, mold tolerance specification, GD&T molded parts, achievable injection molding tolerance, tight tolerance mold, tolerance cost trade-off">
+  <meta property="og:title" content="Injection Mold Tolerances â€” What Â±0.02 mm Really Means | Gege Mould">
+  <meta property="og:description" content="Understanding DIN 16742 tolerance grades, what's actually achievable in production vs. what's aspirational, and how tolerance specifications drive mold cost.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://gegemould.com/assets/logos/logo-primary.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://gegemould.com/blog-tolerances.html">
+  <link rel="alternate" hreflang="en" href="https://gegemould.com/">
+<link rel="alternate" hreflang="pt" href="https://gegemould.com/pt/">
+<link rel="alternate" hreflang="es" href="https://gegemould.com/es/">
+<link rel="alternate" hreflang="ar" href="https://gegemould.com/ar/">
+<link rel="alternate" hreflang="id" href="https://gegemould.com/id/">
+<link rel="alternate" hreflang="x-default" href="https://gegemould.com/"><title>Injection Mold Tolerances â€” DIN 16742 Guide &amp; Cost Trade-Offs | Gege Mould Blog</title>
+  <link rel="stylesheet" href="css/style.css?v=1782378420">
+  <link rel="stylesheet" href="css/rtl.css?v=1782378420">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logos/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/logos/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/logos/favicon-180x180.png">
+  <style>
+    .blog-article { max-width:760px; margin:0 auto; padding:0 1.5rem 4rem; }
+    .blog-article .cat-badge { display:inline-block; background:#e6f1fb; color:#0c447c; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; padding:4px 12px; border-radius:4px; margin-bottom:1.25rem; font-weight:500; }
+    .blog-article h1 { font-size:clamp(1.6rem,3.5vw,2.2rem); font-weight:500; line-height:1.25; color:var(--navy); margin-bottom:1rem; letter-spacing:-0.02em; }
+    .blog-article .deck { font-size:1.05rem; color:var(--text-light); line-height:1.7; margin-bottom:1.75rem; padding-bottom:1.75rem; border-bottom:0.5px solid var(--color-border-tertiary); }
+    .blog-article .byline-row { display:flex; align-items:center; gap:12px; margin-bottom:2.5rem; }
+    .blog-article .avatar { width:38px; height:38px; border-radius:50%; background:#e6f1fb; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; color:#185fa5; flex-shrink:0; }
+    .blog-article .byline-text .name { font-size:14px; font-weight:500; color:var(--navy); }
+    .blog-article .byline-text .meta { font-size:12px; color:var(--text-light); }
+    .blog-article .read-time { margin-left:auto; font-size:12px; color:var(--text-muted); }
+    .blog-article .article p { font-size:1rem; color:var(--navy); margin-bottom:1.25rem; line-height:1.8; }
+    .blog-article .article h2 { font-size:1.25rem; font-weight:500; color:var(--navy); margin:2.75rem 0 0.9rem; padding-top:0.25rem; border-top:0.5px solid var(--color-border-tertiary); }
+    .blog-article .article h3 { font-size:1rem; font-weight:500; color:var(--navy); margin:2rem 0 0.6rem; }
+    .blog-article .article ul { margin:0 0 1.25rem 1.25rem; color:var(--navy); }
+    .blog-article .article ul li { font-size:1rem; margin-bottom:0.5rem; line-height:1.75; }
+    .blog-article .pull { border-left:3px solid #1a5fa8; padding:0.9rem 1.25rem; margin:2rem 0; background:var(--color-background-secondary); border-radius:0; }
+    .blog-article .pull p { font-size:1.05rem; font-style:italic; color:var(--text-light); margin:0; }
+    .blog-article .stat-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin:2rem 0; }
+    .blog-article .stat-card { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:1rem; text-align:center; }
+    .blog-article .stat-card .num { font-size:1.8rem; font-weight:500; color:#185fa5; display:block; line-height:1.1; margin-bottom:4px; }
+    .blog-article .stat-card .lbl { font-size:12px; color:var(--text-light); line-height:1.4; }
+    .blog-article .process-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin:2rem 0; }
+    .blog-article .step-card { border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1.25rem; background:var(--color-background-primary); }
+    .blog-article .step-num { font-size:1.5rem; font-weight:500; color:#b5d4f4; line-height:1; margin-bottom:8px; }
+    .blog-article .step-title { font-size:13px; font-weight:500; color:#185fa5; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px; }
+    .blog-article .step-desc { font-size:13px; color:var(--text-light); line-height:1.6; }
+    .blog-article .case-box { border:0.5px solid var(--color-border-tertiary); border-top:2px solid #1a5fa8; border-radius:var(--border-radius-lg); padding:1.5rem; margin:2rem 0; background:var(--color-background-secondary); }
+    .blog-article .case-label { font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:#185fa5; font-weight:500; margin-bottom:0.75rem; }
+    .blog-article .case-title { font-size:1rem; font-weight:500; color:var(--navy); margin-bottom:0.75rem; }
+    .blog-article .case-desc { font-size:14px; color:var(--text-light); line-height:1.7; margin-bottom:1rem; }
+    .blog-article .result-strip { display:flex; flex-wrap:wrap; gap:1.5rem; padding-top:1rem; border-top:0.5px solid var(--color-border-tertiary); }
+    .blog-article .result-item .val { font-size:1.4rem; font-weight:500; color:#185fa5; display:block; }
+    .blog-article .result-item .lbl { font-size:12px; color:var(--text-light); }
+    .blog-article .table-wrap { overflow-x:auto; margin:1.5rem 0; }
+    .blog-article table { width:100%; border-collapse:collapse; font-size:13px; }
+    .blog-article th { text-align:left; padding:8px 12px; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-light); font-weight:500; border-bottom:0.5px solid var(--color-border-secondary); }
+    .blog-article td { padding:9px 12px; color:var(--navy); border-bottom:0.5px solid var(--color-border-tertiary); vertical-align:top; line-height:1.55; }
+    .blog-article tr:last-child td { border-bottom:none; }
+    .blog-article .blue-td { color:#185fa5; font-style:italic; }
+    .blog-article .closing { background:var(--color-background-secondary); border-radius:var(--border-radius-lg); padding:1.75rem; margin:2.5rem 0 1.5rem; }
+    .blog-article .closing p { margin-bottom:0; font-size:0.975rem; color:var(--text-light); }
+    .blog-article .author-box { display:flex; align-items:center; gap:14px; padding:1.25rem 0; border-top:0.5px solid var(--color-border-tertiary); margin-top:2.5rem; }
+    .blog-article .author-avatar { width:44px; height:44px; border-radius:50%; background:#e6f1fb; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:500; color:#185fa5; flex-shrink:0; }
+    .blog-article .author-name { font-size:14px; font-weight:500; color:var(--navy); }
+    .blog-article .author-role { font-size:12px; color:var(--text-light); }
+    .blog-article .tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:1.5rem; }
+    .blog-article .tag { font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-light); border:0.5px solid var(--color-border-secondary); border-radius:4px; padding:3px 10px; }
+    .blog-article .article-fig { margin:2.25rem 0; }
+    .blog-article .article-fig img { width:100%; height:auto; border-radius:var(--border-radius-md); display:block; }
+    .blog-article .article-fig figcaption { font-size:0.8rem; color:var(--text-light); text-align:center; margin-top:0.65rem; line-height:1.55; padding:0 0.5rem; }
+    .blog-article .author-avatar-img { width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+  </style>
+</head>
+<body>
+
+<!--#include header -->
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <p class="breadcrumb"><a href="index.html" data-i18n="nav.home">Home</a> &rsaquo; <a href="news.html" data-i18n="nav.blog_news">Technical Resources</a> &rsaquo; <span data-i18n="blog.tolerances.breadcrumb">Tolerances</span></p>
+      <h1 data-i18n="blog.tolerances.heading">Injection Mold Tolerances: What &plusmn;0.02 mm Really Means and How to Specify Them</h1>
+      <p class="page-hero__subtitle" data-i18n="blog.tolerances.deck">Understanding DIN 16742 tolerance grades, what is actually achievable in production vs. what is aspirational, how tolerance specifications drive mold cost, and how to write a tolerance callout that does not waste money.</p>
+    </div>
+  </section>
+
+  <div class="blog-article">
+    <div class="cat-badge">Technical Insight &middot; Quality &amp; Specification</div>
+    <div class="byline-row">
+      <div class="avatar">Gege</div>
+      <div class="byline-text">
+        <div class="name">Kankan</div>
+        <div class="meta">Gege Mould &middot; Mold Design Engineer</div>
+      </div>
+      <div class="read-time">10 min read</div>
+    </div>
+
+    <div class="article">
+      <p>A procurement manager at a European Tier 1 supplier sent us an RFQ for a PA66 GF30 engine bracket. The drawing called out &plusmn;0.02 mm on every dimension â€” roughly the thickness of a human hair split in half. The part was 240 mm long. We asked whether the tolerance was truly functional or carried forward from a metal machining drawing. After a week of internal review, the answer came back: only three of the eighteen dimensions actually required &plusmn;0.05 mm or better. The remaining fifteen could be held at &plusmn;0.15 mm or wider. The mold cost estimate dropped by roughly 23%. The program moved forward.</p>
+
+      <p>This scenario â€” tolerances specified tighter than the application requires, often inherited from machined metal part drawings or from a well-intentioned but uninformed "tight is better" assumption â€” is one of the most common and most expensive errors in injection mold procurement. Understanding what is actually achievable, what different materials can deliver, and how to write a tolerance specification that is both functional and manufacturable is essential knowledge for anyone buying an injection mold.</p>
+
+      <div class="pull"><p>Tight tolerances do not automatically produce better parts. They produce more expensive molds, longer lead times, higher scrap rates, and more inspection cost â€” whether or not the tolerance was actually needed.</p></div>
+
+      <div class="stat-row">
+        <div class="stat-card"><span class="num">&plusmn;0.02 mm</span><span class="lbl">Tightest tolerance Gege Mould routinely delivers â€” for small, stable-geometry features in low-shrinkage materials</span></div>
+        <div class="stat-card"><span class="num">&plusmn;0.05 mm</span><span class="lbl">Practical precision limit for most automotive injection molded parts with good DFM</span></div>
+        <div class="stat-card"><span class="num">&plusmn;0.1â€“0.3 mm</span><span class="lbl">Realistic commercial tolerance range for general-purpose molded parts without special tooling</span></div>
+      </div>
+
+      <h2>What controls achievable tolerance in injection molding</h2>
+      <p>Injection molding is not machining. The plastic shrinks as it cools, and it shrinks differently in different directions, at different rates depending on wall thickness, and to different final dimensions depending on processing conditions â€” even in the same mold cavity. A tolerance that was held on Tuesday's production run may drift on Wednesday if the ambient humidity changed or the regrind percentage shifted. Understanding the physics is the first step to writing a realistic tolerance specification.</p>
+
+      <p>Six factors interact to determine what tolerance is achievable on any given dimension:</p>
+
+      <div class="process-grid">
+        <div class="step-card"><div class="step-num">01</div><div class="step-title">Material shrinkage factor</div><p class="step-desc">Every thermoplastic shrinks as it solidifies â€” from ~0.2% (PBT GF30) to ~2.5% (unfilled PP). This is the single largest variable. Lower and more consistent shrinkage = tighter achievable tolerances. Glass-reinforced grades shrink less and more predictably than unfilled grades.</p></div>
+        <div class="step-card"><div class="step-num">02</div><div class="step-title">Part size and geometry</div><p class="step-desc">Tolerance is proportional to dimension. A &plusmn;0.05 mm tolerance on a 10 mm feature is realistic. The same tolerance on a 500 mm panel is not â€” the absolute shrinkage variation over 500 mm exceeds the tolerance band regardless of process control. This is literally physics, not a capability limitation.</p></div>
+        <div class="step-card"><div class="step-num">03</div><div class="step-title">Wall thickness uniformity</div><p class="step-desc">Differential cooling from non-uniform wall sections produces differential shrinkage â€” which resolves as warpage and dimensional variation. A part with 3:1 wall thickness variation will never hold the same tolerance as a part with uniform walls, regardless of mold quality.</p></div>
+        <div class="step-card"><div class="step-num">04</div><div class="step-title">Tool construction and precision</div><p class="step-desc">The mold cavity itself has tolerances. A cavity machined on a high-precision CNC with final EDM finishing can hold tighter part tolerances than one built on older equipment. Tool steel selection (hardened vs. pre-hardened) affects long-term dimensional stability as the mold wears over hundreds of thousands of cycles.</p></div>
+        <div class="step-card"><div class="step-num">05</div><div class="step-title">Processing consistency</div><p class="step-desc">Melt temperature, mold temperature, hold pressure, hold time, cooling time, and material moisture content all affect final part dimensions. A mold that can hold &plusmn;0.05 mm in a production cell with closed-loop process control may only hold &plusmn;0.15 mm in a less controlled environment. The mold is only part of the system.</p></div>
+        <div class="step-card"><div class="step-num">06</div><div class="step-title">Post-molding environment</div><p class="step-desc">Nylons (PA6, PA66) absorb moisture after molding and grow dimensionally. Parts measured immediately after molding will be different sizes 24 hours later after conditioning. For PA parts requiring tight tolerances, conditioning and measurement protocols must be specified â€” otherwise the tolerance is meaningless.</p></div>
+      </div>
+
+      <h2>DIN 16742: the standard tolerance framework for plastic molded parts</h2>
+      <p>DIN 16742 (harmonized as ISO 20457) defines tolerance groups for plastic molded parts based on material shrinkage characteristics and part size. It is the most widely referenced standard in automotive injection mold procurement, and understanding its structure is essential for writing a tolerance specification that a mold maker can actually work to.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Tolerance group</th><th>Material examples</th><th>Shrinkage range</th><th>Typical achievable tolerance (100 mm dimension)</th><th>Relative mold cost impact</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>TG1</strong> â€” Very precise</td><td>PBT GF30, POM, PC GF30</td><td>&lt; 0.5%</td><td>&plusmn;0.05 â€“ 0.10 mm</td><td class="blue-td">Highest â€” requires optimized tool construction, tight process control, and more complex cooling</td></tr>
+            <tr><td><strong>TG2</strong> â€” Precise</td><td>PA6 GF30, PA66 GF30, ABS, PC/ABS</td><td>0.5 â€“ 1.0%</td><td>&plusmn;0.08 â€“ 0.15 mm</td><td class="blue-td">Moderate â€” standard precision automotive mold construction</td></tr>
+            <tr><td><strong>TG3</strong> â€” Normal</td><td>PA6 unfilled, PP-GF20</td><td>1.0 â€“ 1.5%</td><td>&plusmn;0.12 â€“ 0.25 mm</td><td class="blue-td">Standard â€” commercial mold construction</td></tr>
+            <tr><td><strong>TG4</strong> â€” Coarse</td><td>PP unfilled, PP-TD20, PE</td><td>1.5 â€“ 2.5%</td><td>&plusmn;0.20 â€“ 0.40 mm</td><td class="blue-td">Lowest â€” simplest tool construction; widest processing window</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Note that tolerance is proportional to nominal dimension. The values in the table are for a ~100 mm feature. For a 500 mm feature in the same material, the achievable tolerance is roughly 2â€“3Ã— wider. This proportionality is built into the DIN 16742 tables and should be reflected in every tolerance callout â€” specifying the same absolute tolerance on every dimension regardless of size is a red flag that the tolerance was not derived from a functional requirement.</p>
+
+      <figure class="article-fig">
+        <img src="assets/images/0015DSC08269-ogpH.jpg"
+             alt="Precision CMM dimensional inspection of an injection molded automotive bracket â€” verifying critical datum dimensions against the part print" loading="lazy" width="800" height="800">
+        <figcaption data-i18n="blog.tolerances.fig1_caption">CMM dimensional inspection of an injection molded automotive bracket. The mold's ability to hold tolerance is verified at T1 sampling with a full dimensional report against every dimension on the part print.</figcaption>
+      </figure>
+
+      <h2>How tolerance drives mold cost â€” the real numbers</h2>
+      <p>The relationship between specified tolerance and mold cost is non-linear. Tightening tolerance from TG3 to TG2 typically adds 10â€“15% to tool cost. Tightening from TG2 to TG1 can add 25â€“40% â€” and in some geometries, the premium is higher because it requires a fundamentally different tool construction approach.</p>
+
+      <p>Here is what changes in the mold as tolerance tightens:</p>
+      <ul>
+        <li><strong>TG4 â†’ TG3 (coarse to normal):</strong> Standard pre-hardened tool steel, conventional cooling layout, standard gate design. The incremental cost is modest â€” mostly additional machining time for tighter cavity dimensions.</li>
+        <li><strong>TG3 â†’ TG2 (normal to precise):</strong> Hardened tool steel may be required for wear-critical surfaces. Cooling circuits must be more carefully routed to maintain temperature uniformity. Gate sizing and placement require mold flow analysis to predict and compensate for anisotropic shrinkage. Cavity dimensions are machined with tighter tolerances on the mold itself, often requiring EDM finishing passes. Inspection at T1 is more extensive.</li>
+        <li><strong>TG2 â†’ TG1 (precise to very precise):</strong> Fully hardened tool steel (typically 50â€“54 HRC), conformal cooling often required, multiple mold flow iterations to optimize gate location and process window, cavity dimensions verified by CMM at intermediate machining stages â€” not just at final inspection. The mold build time increases by 2â€“4 weeks. Every surface that touches the part is a precision surface.</li>
+      </ul>
+
+      <div class="pull"><p>The most expensive tolerance on any part print is the one that is tighter than the application requires â€” and was never questioned.</p></div>
+
+      <h2>How to write a tolerance specification that doesn't waste money</h2>
+      <p>Based on hundreds of mold programs, here is the approach we recommend to every customer before tool build begins:</p>
+
+      <h3>1. Classify every dimension by functional criticality</h3>
+      <p>Not all dimensions are equal. A datum surface that locates a seal or mates with another part at assembly is functionally critical. A cosmetic surface that is visible but non-functional has a different tolerance requirement. A non-functional clearance surface has yet another. Label each dimension on the print: <strong>critical</strong> (tight tolerance required for function), <strong>significant</strong> (standard precision), or <strong>reference</strong> (wide tolerance acceptable). Then apply tolerances by classification, not uniformly.</p>
+
+      <h3>2. Specify tolerances with the material in mind</h3>
+      <p>A &plusmn;0.05 mm callout is realistic for PBT GF30. It is aspirational for unfilled PP. The material selection section of this site has more detail â€” but the principle is: write the tolerance against what the material can deliver, not against what the steel cavity can theoretically be machined to.</p>
+
+      <h3>3. Use GD&amp;T datum references, not linear &plusmn; on every dimension</h3>
+      <p>A well-constructed GD&amp;T datum reference frame â€” typically three mutually perpendicular planes established from functional part features â€” defines how the part is located in the inspection fixture and in the assembly. It is more representative of real-world function than a list of linear dimensions with identical &plusmn; tolerances. It also tells the mold maker which surfaces are the priority for precision â€” the datums and the features referenced to them â€” rather than treating every surface as equally critical.</p>
+
+      <h3>4. Include conditioning and measurement protocol for moisture-sensitive materials</h3>
+      <p>For PA6 and PA66 parts: specify whether dimensions are to be measured dry (immediately after molding), conditioned (after moisture equilibration at 23&deg;C / 50% RH), or both. A part that meets tolerance dry may be out of tolerance conditioned â€” and vice versa. The protocol must be agreed before tool build, not debated after T1 samples are measured.</p>
+
+      <h3>5. Ask: what actually happens if this dimension is out of tolerance?</h3>
+      <p>If the answer is "the part won't assemble" or "the seal will leak" or "the snap-fit won't engage" â€” the tolerance is justified. If the answer is "we've always specified it this way" or "tighter is better" â€” the tolerance is worth revisiting. Tightening a tolerance that has no functional consequence adds cost with zero value. Every dimension on the print should survive this question.</p>
+
+      <h2>Real-world tolerance capability by material and dimension</h2>
+      <p>The table below represents what Gege Mould delivers in series production with good DFM, modern CNC/EDM equipment, and consistent process control. These are <em>achievable</em> values â€” not guaranteed minimums, and not theoretical limits. Individual geometries may vary. A deep-draw rib with high aspect ratio will not hold the same tolerance as a simple flat surface in the same material.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Material</th><th>â‰¤ 30 mm feature</th><th>30â€“100 mm feature</th><th>100â€“300 mm feature</th><th>300â€“600 mm feature</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>PBT GF30</td><td>&plusmn;0.03 â€“ 0.06 mm</td><td>&plusmn;0.05 â€“ 0.10 mm</td><td>&plusmn;0.10 â€“ 0.18 mm</td><td>&plusmn;0.18 â€“ 0.30 mm</td></tr>
+            <tr><td>POM</td><td>&plusmn;0.04 â€“ 0.07 mm</td><td>&plusmn;0.06 â€“ 0.12 mm</td><td>&plusmn;0.12 â€“ 0.20 mm</td><td>&plusmn;0.20 â€“ 0.35 mm</td></tr>
+            <tr><td>PA6 GF30 / PA66 GF30</td><td>&plusmn;0.04 â€“ 0.08 mm</td><td>&plusmn;0.06 â€“ 0.14 mm</td><td>&plusmn;0.12 â€“ 0.22 mm</td><td>&plusmn;0.20 â€“ 0.38 mm</td></tr>
+            <tr><td>ABS / PC/ABS</td><td>&plusmn;0.05 â€“ 0.09 mm</td><td>&plusmn;0.08 â€“ 0.16 mm</td><td>&plusmn;0.14 â€“ 0.26 mm</td><td>&plusmn;0.24 â€“ 0.42 mm</td></tr>
+            <tr><td>PA6 unfilled / PA66 unfilled</td><td>&plusmn;0.06 â€“ 0.10 mm</td><td>&plusmn;0.10 â€“ 0.20 mm</td><td>&plusmn;0.18 â€“ 0.32 mm</td><td>&plusmn;0.30 â€“ 0.55 mm</td></tr>
+            <tr><td>PP-GF20 / PP-GF30</td><td>&plusmn;0.06 â€“ 0.12 mm</td><td>&plusmn;0.10 â€“ 0.22 mm</td><td>&plusmn;0.18 â€“ 0.35 mm</td><td>&plusmn;0.30 â€“ 0.55 mm</td></tr>
+            <tr><td>PP unfilled</td><td>&plusmn;0.08 â€“ 0.15 mm</td><td>&plusmn;0.14 â€“ 0.28 mm</td><td>&plusmn;0.24 â€“ 0.45 mm</td><td>&plusmn;0.40 â€“ 0.70 mm</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="blue-td" style="font-size:0.85rem;">Values are empirically derived from production data. They represent what a well-designed, well-built, and well-operated mold can deliver â€” not what every mold will deliver under every condition. Use as a guideline, not a guarantee. Individual part geometry always governs.</p>
+
+      <h2>The Gege Mould approach: tolerance review before tool design</h2>
+      <p>On every program we receive, tolerance review is one of the first engineering activities â€” before cooling design, before gate placement, before any steel is ordered. The process:</p>
+      <ul>
+        <li><strong>Classify every dimension</strong> by functional criticality (critical / significant / reference)</li>
+        <li><strong>Cross-check the tolerance specification against the material</strong> â€” flag any callout that is not realistically achievable in the specified material at the given feature size</li>
+        <li><strong>Identify the dimensions that drive tool cost</strong> â€” typically the tightest 2â€“5 tolerances on the print, which often dictate tool steel grade, cooling complexity, and inspection scope</li>
+        <li><strong>Present the trade-offs to the customer before tool build</strong> â€” "these three dimensions at &plusmn;0.03 mm add roughly 18% to tool cost and 2 weeks to lead time. Are they functionally required? If yes, we build to them. If not, here is what relaxing to &plusmn;0.08 mm saves."</li>
+      </ul>
+
+      <div class="closing">
+        <p>If you are planning an injection mold program and want an independent tolerance review of your part print before going to tool â€” identifying which dimensions will drive cost and which can be relaxed without functional impact â€” our engineering team is available to work through the analysis with you. Getting the tolerance specification right before tool build is one of the highest-return engineering activities in injection mold procurement. It costs nothing relative to the tool, and the savings can be substantial.</p>
+      </div>
+    </div>
+
+    <div class="author-box">
+      <img src="assets/images/author-jiujiu.webp" alt="Kankan â€” Mold Design Engineer at Gege Mould" class="author-avatar-img" loading="lazy" width="44" height="44">
+      <div><div class="author-name">Kankan</div><div class="author-role">Mold Design Engineer &middot; Gege Mould</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">Tolerances</span><span class="tag">DIN 16742</span><span class="tag">GD&amp;T</span><span class="tag">Quality</span><span class="tag">CMM Inspection</span><span class="tag">DFM</span><span class="tag">Cost Optimization</span><span class="tag">Automotive</span><span class="tag">Specification</span>
+    </div>
+  </div>
+
+  <section class="cta-band">
+    <div class="container">
+      <h2 data-i18n="home.cta_heading">Ready to Discuss Your Mold Program?</h2>
+      <p data-i18n="home.cta_sub">Send us your part drawing or CAD file. Our engineering team will review it and respond with an initial assessment within 48 hours.</p>
+      <a href="contact.html" class="btn btn--primary btn--lg" data-i18n="nav.quote">Get a Free Quote</a>
+    </div>
+  </section>
+</main>
+
+<!--#include footer -->
+
+<!--#include scripts -->
+
+<!-- WhatsApp Floating Widget -->
+<!--#include whatsapp -->
+</body>
+</html>

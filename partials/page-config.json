@@ -1,0 +1,20 @@
+{
+  "index":                    { "active": "home",      "cta": "contact.html", "services": "std",  "resources": "std" },
+  "about":                    { "active": "about",     "cta": "contact.html", "services": "std",  "resources": "std" },
+  "quality":                  { "active": "none",      "cta": "contact.html", "services": "std",  "resources": "std" },
+  "capabilities":             { "active": "services",  "cta": "contact.html", "services": "std",  "resources": "std" },
+  "capability-table":         { "active": "services",  "cta": "rfq.html",     "services": "full", "resources": "compact" },
+  "case-studies":             { "active": "resources", "cta": "rfq.html",     "services": "full", "resources": "full" },
+  "case-study-export":        { "active": "resources", "cta": "rfq.html",     "services": "full", "resources": "compact" },
+  "news":                     { "active": "resources", "cta": "contact.html", "services": "std",  "resources": "std" },
+  "industries":               { "active": "resources", "cta": "contact.html", "services": "std",  "resources": "std" },
+  "automotive-mold-solutions":{ "active": "services",  "cta": "rfq.html",     "services": "std",  "resources": "compact" },
+  "contact":                  { "active": "contact",   "cta": "contact.html", "services": "std",  "resources": "std" },
+  "rfq":                      { "active": "none",      "cta": "rfq.html",     "services": "full", "resources": "full" },
+  "faqs":                     { "active": "resources", "cta": "contact.html", "services": "std",  "resources": "std" },
+  "blog-conformal-cooling":   { "active": "resources", "cta": "rfq.html",     "services": "full", "resources": "compact" },
+  "blog-gate-location":       { "active": "resources", "cta": "rfq.html",     "services": "full", "resources": "compact" },
+  "blog-material-selection":  { "active": "resources", "cta": "rfq.html",     "services": "full", "resources": "compact" },
+  "blog-tolerances":          { "active": "resources", "cta": "rfq.html",     "services": "full", "resources": "compact" },
+  "blog-top-automotive-molding-companies": { "active": "resources", "cta": "rfq.html",     "services": "full", "resources": "compact" }
+}

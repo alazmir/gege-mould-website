@@ -1,0 +1,29 @@
+{
+  "name": "gege-mould-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Gege Mould website — handles contact/quote form submissions",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "lucide-static": "^1.21.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^9.0.1",
+    "playwright": "^1.61.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "sharp": "^0.35.2"
+  }
+}

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Panel — Gege Mould</title>
+  <style>
+    :root {
+      --navy: #1a2d3d;
+      --brass: #a56c14;
+      --brass-hover: #8a4f0d;
+      --bg: #f5f5f5;
+      --white: #fff;
+      --text: #2c3e50;
+      --text-muted: #8a97a5;
+      --border: #dde2e8;
+      --error: #c62828;
+      --success: #2e7d32;
+      --radius: 8px;
+      --shadow: 0 2px 12px rgba(0,0,0,.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Login Page ── */
+    .login-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .login-card__logo {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: .5rem;
+    }
+    .login-card__logo span { color: var(--brass); }
+    .login-card__subtitle {
+      color: var(--text-muted);
+      font-size: .85rem;
+      margin-bottom: 1.5rem;
+    }
+    .login-card__error {
+      background: #fbe9e7;
+      color: var(--error);
+      padding: .75rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: .85rem;
+      display: none;
+    }
+    .login-card__error--visible { display: block; }
+    .login-card input[type="password"] {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      margin-bottom: 1rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .login-card input[type="password"]:focus { border-color: var(--brass); }
+    .login-card button {
+      width: 100%;
+      padding: .75rem;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      font-family: inherit;
+    }
+    .login-card button:hover { background: #243b50; }
+    .login-card button:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* ── Dashboard ── */
+    .dashboard { display: none; }
+    .dashboard--visible { display: block; }
+    .admin-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .admin-header__brand { font-weight: 700; font-size: 1.1rem; }
+    .admin-header__brand span { color: var(--brass); }
+    .admin-header__actions { display: flex; gap: .5rem; align-items: center; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem 1rem;
+      font-size: .8rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      text-decoration: none;
+      transition: all .15s;
+    }
+    .btn--brass { background: var(--brass); color: var(--white); }
+    .btn--brass:hover { background: var(--brass-hover); }
+    .btn--outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,.35); }
+    .btn--outline:hover { background: rgba(255,255,255,.1); }
+
+    .admin-main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+
+    /* Stats */
+    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.25rem; text-align: center; }
+    .stat-card__number { font-size: 2rem; font-weight: 800; color: var(--navy); }
+    .stat-card__label { font-size: .78rem; color: var(--text-muted); margin-top: .25rem; text-transform: uppercase; letter-spacing: .05em; }
+
+    /* Search & toolbar */
+    .toolbar { display: flex; gap: .75rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+    .toolbar__search {
+      flex: 1; min-width: 200px;
+      padding: .6rem .75rem;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      font-size: .85rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .toolbar__search:focus { border-color: var(--brass); }
+
+    /* Table */
+    .table-wrap { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    th { background: #f8f8f8; text-align: left; padding: .6rem .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; font-size: .72rem; color: var(--text-muted); border-bottom: 2px solid var(--border); white-space: nowrap; }
+    td { padding: .55rem .75rem; border-bottom: 1px solid var(--border); max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    tr:hover td { background: #fafafa; }
+    td.message-cell { max-width: 300px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: .7rem; font-weight: 600; }
+    .badge--sent { background: #e8f5e9; color: #2e7d32; }
+    .badge--pending { background: #fff3e0; color: #e65100; }
+    .badge--lang { background: #e3f2fd; color: #1565c0; }
+
+    /* Pagination */
+    .pagination { display: flex; justify-content: center; align-items: center; gap: .5rem; margin-top: 1rem; padding-bottom: 1rem; }
+    .pagination button {
+      padding: .4rem .8rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--white);
+      cursor: pointer;
+      font-size: .8rem;
+      font-family: inherit;
+    }
+    .pagination button:hover { background: #f0f0f0; }
+    .pagination button:disabled { opacity: .4; cursor: not-allowed; }
+    .pagination__info { font-size: .8rem; color: var(--text-muted); }
+
+    /* Loading */
+    .loading { text-align: center; padding: 3rem; color: var(--text-muted); }
+    .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid var(--border); border-top-color: var(--brass); border-radius: 50%; animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Empty state */
+    .empty { text-align: center; padding: 3rem; color: var(--text-muted); }
+    .empty__icon { font-size: 3rem; margin-bottom: .5rem; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-main { padding: .75rem; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      td.message-cell { max-width: 150px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <div class="login-card__logo">Gege<span>Mould</span></div>
+    <div class="login-card__subtitle">Admin Panel — Secure Access</div>
+    <div class="login-card__error" id="loginError">Incorrect password. Please try again.</div>
+    <form id="loginForm">
+      <input type="password" id="loginPassword" placeholder="Enter admin password" required autocomplete="current-password">
+      <button type="submit" id="loginBtn">Sign In</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard" id="dashboard">
+  <header class="admin-header">
+    <div class="admin-header__brand">Gege<span>Mould</span> — Admin Panel</div>
+    <div class="admin-header__actions">
+      <button class="btn btn--outline" onclick="refreshData()">↻ Refresh</button>
+      <a class="btn btn--brass" href="/api/admin/submissions/csv" onclick="return downloadCSV(event)">⬇ Export CSV</a>
+      <button class="btn btn--outline" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="admin-main">
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-card"><div class="stat-card__number" id="statTotal">—</div><div class="stat-card__label">Total Submissions</div></div>
+      <div class="stat-card"><div class="stat-card__number" id="statToday">—</div><div class="stat-card__label">Today</div></div>
+      <div class="stat-card"><div class="stat-card__number" id="statWeek">—</div><div class="stat-card__label">This Week</div></div>
+      <div class="stat-card"><div class="stat-card__number" id="statEmails">—</div><div class="stat-card__label">Emails Sent</div></div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" class="toolbar__search" id="searchInput" placeholder="Search by name, email, company, or message…">
+      <button class="btn btn--brass" onclick="refreshData()">Search</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="loading" id="loadingState"><div class="spinner"></div><p style="margin-top:.5rem">Loading submissions…</p></div>
+      <table id="submissionsTable" style="display:none">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Type</th>
+            <th>Message</th>
+            <th>Lang</th>
+            <th>Email Sent</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div class="empty" id="emptyState" style="display:none">
+        <div class="empty__icon">📭</div>
+        <p>No submissions yet.</p>
+      </div>
+    </div>
+
+    <div class="pagination" id="pagination" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var API_BASE = '/api/admin';
+  var token = localStorage.getItem('admin_token');
+  var currentPage = 1;
+  var totalPages = 1;
+  var currentSearch = '';
+
+  // ── Init ──
+  if (token) {
+    checkAuth().then(function(ok) {
+      if (ok) { showDashboard(); } else { showLogin(); }
+    });
+  } else {
+    showLogin();
+  }
+
+  // ── Login ──
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var pw = document.getElementById('loginPassword').value;
+    var btn = document.getElementById('loginBtn');
+    var error = document.getElementById('loginError');
+    error.classList.remove('login-card__error--visible');
+    btn.disabled = true;
+    btn.textContent = 'Signing In…';
+
+    fetch(API_BASE + '/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success && data.token) {
+        token = data.token;
+        localStorage.setItem('admin_token', token);
+        document.getElementById('loginPassword').value = '';
+        showDashboard();
+      } else {
+        error.textContent = data.message || 'Incorrect password.';
+        error.classList.add('login-card__error--visible');
+      }
+    })
+    .catch(function() {
+      error.textContent = 'Network error. Please try again.';
+      error.classList.add('login-card__error--visible');
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    });
+  });
+
+  // Also allow Enter key on password field
+  document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+  });
+
+  function checkAuth() {
+    return fetch(API_BASE + '/check', {
+      headers: { 'Authorization': 'Bearer ' + (token || '') }
+    })
+    .then(function(r) { return r.ok; })
+    .catch(function() { return false; });
+  }
+
+  // ── UI state ──
+  function showLogin() {
+    token = null;
+    localStorage.removeItem('admin_token');
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('dashboard').classList.remove('dashboard--visible');
+  }
+
+  function showDashboard() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboard').classList.add('dashboard--visible');
+    refreshData();
+  }
+
+  // ── Data loading ──
+  window.refreshData = function(page) {
+    if (page) currentPage = page;
+    currentSearch = document.getElementById('searchInput').value.trim();
+
+    document.getElementById('loadingState').style.display = 'block';
+    document.getElementById('submissionsTable').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('pagination').style.display = 'none';
+
+    var params = new URLSearchParams({
+      page: currentPage,
+      limit: 50
+    });
+    if (currentSearch) params.set('search', currentSearch);
+
+    fetch(API_BASE + '/submissions?' + params.toString(), {
+      headers: { 'Authorization': 'Bearer ' + (token || '') }
+    })
+    .then(function(r) {
+      if (r.status === 401) { showLogin(); throw new Error('auth'); }
+      return r.json();
+    })
+    .then(function(data) {
+      document.getElementById('loadingState').style.display = 'none';
+
+      if (!data.submissions || data.submissions.length === 0) {
+        document.getElementById('emptyState').style.display = 'block';
+        updateStats(0, 0, 0, 0);
+        return;
+      }
+
+      document.getElementById('submissionsTable').style.display = 'table';
+      renderTable(data.submissions);
+      renderPagination(data.page, data.totalPages, data.total);
+
+      // Compute stats from visible data
+      var today = new Date().toISOString().slice(0, 10);
+      var weekAgo = new Date(Date.now() - 7*24*60*60*1000).toISOString().slice(0, 10);
+      var todayCount = 0, weekCount = 0, emailCount = 0;
+      data.submissions.forEach(function(s) {
+        if ((s.created_at || '').slice(0, 10) === today) todayCount++;
+        if ((s.created_at || '') >= weekAgo) weekCount++;
+        if (s.email_sent) emailCount++;
+      });
+      // For global stats, use the data.total for total count
+      updateStats(data.total, todayCount, weekCount, emailCount);
+    })
+    .catch(function(err) {
+      if (err.message !== 'auth') {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+        document.getElementById('emptyState').querySelector('p').textContent = 'Error loading data. Check console.';
+      }
+    });
+  };
+
+  function renderTable(submissions) {
+    var tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    submissions.forEach(function(s) {
+      var tr = document.createElement('tr');
+      var date = (s.created_at || '').replace('T', ' ').slice(0, 16);
+      var emailBadge = s.email_sent
+        ? '<span class="badge badge--sent">Sent</span>'
+        : '<span class="badge badge--pending">Pending</span>';
+      var langBadge = s.language
+        ? '<span class="badge badge--lang">' + escapeHtml(s.language.toUpperCase()) + '</span>'
+        : '—';
+      var source = s.utm_source || s.referrer || 'Direct';
+      if (source.length > 30) source = source.slice(0, 30) + '…';
+
+      tr.innerHTML = [
+        '<td>' + escapeHtml(date) + '</td>',
+        '<td><strong>' + escapeHtml(s.name || '') + '</strong></td>',
+        '<td>' + escapeHtml(s.company || '—') + '</td>',
+        '<td><a href="mailto:' + escapeHtml(s.email || '') + '">' + escapeHtml(s.email || '') + '</a></td>',
+        '<td>' + escapeHtml(s.phone || '—') + '</td>',
+        '<td>' + escapeHtml(s.inquiry_type || 'General') + '</td>',
+        '<td class="message-cell" title="' + escapeAttr(s.message || '') + '">' + escapeHtml((s.message || '').slice(0, 100)) + '</td>',
+        '<td>' + langBadge + '</td>',
+        '<td>' + emailBadge + '</td>',
+        '<td title="' + escapeAttr(source) + '">' + escapeHtml(source.slice(0, 25)) + '</td>'
+      ].join('');
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderPagination(page, total, count) {
+    totalPages = total;
+    var pg = document.getElementById('pagination');
+    pg.style.display = 'flex';
+    pg.innerHTML = '';
+
+    var prevBtn = document.createElement('button');
+    prevBtn.textContent = '← Previous';
+    prevBtn.disabled = page <= 1;
+    prevBtn.onclick = function() { if (page > 1) refreshData(page - 1); };
+    pg.appendChild(prevBtn);
+
+    var info = document.createElement('span');
+    info.className = 'pagination__info';
+    info.textContent = 'Page ' + page + ' of ' + total + ' (' + count + ' submissions)';
+    pg.appendChild(info);
+
+    var nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Next →';
+    nextBtn.disabled = page >= total;
+    nextBtn.onclick = function() { if (page < total) refreshData(page + 1); };
+    pg.appendChild(nextBtn);
+  }
+
+  function updateStats(total, today, week, emails) {
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statToday').textContent = today;
+    document.getElementById('statWeek').textContent = week;
+    document.getElementById('statEmails').textContent = emails;
+  }
+
+  // ── CSV Export ──
+  window.downloadCSV = function(e) {
+    e.preventDefault();
+    fetch(API_BASE + '/submissions/csv', {
+      headers: { 'Authorization': 'Bearer ' + (token || '') }
+    })
+    .then(function(r) {
+      if (r.status === 401) { showLogin(); throw new Error('auth'); }
+      return r.blob();
+    })
+    .then(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'gege-mould-submissions-' + new Date().toISOString().slice(0, 10) + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    })
+    .catch(function(err) {
+      if (err.message !== 'auth') alert('Export failed. Check console.');
+    });
+    return false;
+  };
+
+  // ── Logout ──
+  window.logout = function() {
+    fetch(API_BASE + '/logout', { method: 'POST' }).finally(function() {
+      showLogin();
+    });
+  };
+
+  // ── Search on Enter ──
+  document.getElementById('searchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { currentPage = 1; refreshData(1); }
+  });
+
+  // ── Helpers ──
+  function escapeHtml(s) {
+    s = String(s || '');
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function escapeAttr(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+})();
+</script>
+
+</body>
+</html>
