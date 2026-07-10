@@ -31,14 +31,9 @@ jobs:
         run: |
           set -e
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-          echo "Contents of dist/ before deploy:"
-          ls -la dist/ && ls -la dist/css/ && ls -la dist/js/ && ls -la dist/assets/ | head -10
-          echo "Deploying via lftp..."
+          echo "=== dist/ contents ==="
+          ls -la dist/
+          echo "=== Deploying ==="
           cd dist
-          lftp -c "
-            set ftp:ssl-allow yes;
-            set ssl:verify-certificate no;
-            open -u \"$FTP_USER\",\"$FTP_PASS\" $FTP_HOST;
-            mirror -R -v ./ $REMOTE_DIR;
-          "
-          echo "Deploy complete."
+          lftp -c "set ftp:ssl-allow yes; set ssl:verify-certificate no; open -u $FTP_USER,$FTP_PASS $FTP_HOST; mirror -R -v -P 5 ./ $REMOTE_DIR"
+          echo "=== Deploy complete ==="
