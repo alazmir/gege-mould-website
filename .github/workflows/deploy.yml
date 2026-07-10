@@ -22,35 +22,20 @@ jobs:
       - name: Build dist/
         run: node build.js
 
-      - name: Deploy to Hostinger via FTP
+      - name: Debug FTP connection
         env:
           FTP_HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
           FTP_USER: ${{ secrets.HOSTINGER_FTP_USER }}
           FTP_PASS: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           REMOTE_DIR: ${{ secrets.HOSTINGER_REMOTE_DIR }}
         run: |
-          set -e
-          echo "=== dist/ contents ==="
-          ls dist/ && ls dist/css/ && ls dist/js/
-
-          echo "=== Uploading via curl ==="
-          cd dist
-          TOTAL=0
-          FAILED=0
-
-          for file in $(find . -type f | sed 's|^\./||'); do
-            TOTAL=$((TOTAL + 1))
-            if curl -s --fail -T "$file" "ftp://$FTP_HOST/$REMOTE_DIR$file" --user "$FTP_USER:$FTP_PASS" --ftp-create-dirs; then
-              echo "[OK] $file"
-            else
-              echo "[FAIL] $file"
-              FAILED=$((FAILED + 1))
-            fi
-          done
-
-          echo "=== Upload complete: $((TOTAL - FAILED))/$TOTAL files ==="
-          if [ $FAILED -gt 0 ]; then
-            echo "ERROR: $FAILED files failed to upload"
-            exit 1
-          fi
-          echo "All files deployed successfully."
+          echo "FTP_HOST=$FTP_HOST"
+          echo "FTP_USER=$FTP_USER"
+          echo "REMOTE_DIR=$REMOTE_DIR"
+          echo "FTP_PASS length=$(echo -n "$FTP_PASS" | wc -c)"
+          echo "=== Testing curl FTP list ==="
+          curl -v --ftp-pasv --list-only "ftp://$FTP_HOST/$REMOTE_DIR" --user "$FTP_USER:$FTP_PASS" 2>&1 || echo "List failed (may be OK if dir empty)"
+          echo "=== Testing upload of a single test file ==="
+          echo "test" > test_upload.txt
+          curl -v --ftp-pasv -T test_upload.txt "ftp://$FTP_HOST/$REMOTE_DIR/test_upload.txt" --user "$FTP_USER:$FTP_PASS" 2>&1
+          echo "=== Test complete ==="
