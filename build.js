@@ -151,7 +151,7 @@ htmlFiles.forEach(filename => {
 });
 
 // ── Copy static assets ──
-const staticDirs = ['css', 'js', 'assets', 'screenshots'];
+const staticDirs = ['css', 'js', 'assets'];
 const staticFiles = ['sitemap.xml', 'robots.txt', '.htaccess'];
 
 staticDirs.forEach(dir => {
