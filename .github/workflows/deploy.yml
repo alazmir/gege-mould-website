@@ -23,20 +23,10 @@ jobs:
         run: node build.js
 
       - name: Deploy to Hostinger via FTP
-        env:
-          FTP_HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
-          FTP_USER: ${{ secrets.HOSTINGER_FTP_USER }}
-          FTP_PASS: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-          REMOTE_DIR: ${{ secrets.HOSTINGER_REMOTE_DIR }}
-        run: |
-          set -e
-          echo "Installing lftp..."
-          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-          echo "Writing FTP script..."
-          printf 'set ftp:ssl-allow yes\n'                > deploy.lftp
-          printf 'set ssl:verify-certificate no\n'        >> deploy.lftp
-          printf 'open -u "%s","%s" %s\n' "$FTP_USER" "$FTP_PASS" "$FTP_HOST" >> deploy.lftp
-          printf 'mirror -R -v -e ./dist/ %s\n' "$REMOTE_DIR" >> deploy.lftp
-          echo "Running lftp..."
-          lftp -f deploy.lftp
-          echo "Deploy complete."
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOSTINGER_FTP_HOST }}
+          username: ${{ secrets.HOSTINGER_FTP_USER }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: ${{ secrets.HOSTINGER_REMOTE_DIR }}/
