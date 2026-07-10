@@ -22,20 +22,52 @@ jobs:
       - name: Build dist/
         run: node build.js
 
-      - name: Debug FTP connection
+      - name: Deploy to Hostinger via FTP
         env:
           FTP_HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
           FTP_USER: ${{ secrets.HOSTINGER_FTP_USER }}
           FTP_PASS: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           REMOTE_DIR: ${{ secrets.HOSTINGER_REMOTE_DIR }}
         run: |
-          echo "FTP_HOST=$FTP_HOST"
-          echo "FTP_USER=$FTP_USER"
-          echo "REMOTE_DIR=$REMOTE_DIR"
-          echo "FTP_PASS length=$(echo -n "$FTP_PASS" | wc -c)"
-          echo "=== Testing curl FTP list ==="
-          curl -v --ftp-pasv --list-only "ftp://$FTP_HOST/$REMOTE_DIR" --user "$FTP_USER:$FTP_PASS" 2>&1 || echo "List failed (may be OK if dir empty)"
-          echo "=== Testing upload of a single test file ==="
-          echo "test" > test_upload.txt
-          curl -v --ftp-pasv -T test_upload.txt "ftp://$FTP_HOST/$REMOTE_DIR/test_upload.txt" --user "$FTP_USER:$FTP_PASS" 2>&1
-          echo "=== Test complete ==="
+          set -e
+
+          HOST="$FTP_HOST"
+          USER="$FTP_USER"
+          PASS="$FTP_PASS"
+          RDIR="$REMOTE_DIR"
+
+          # Ensure REMOTE_DIR ends with /
+          [[ "$RDIR" != */ ]] && RDIR="$RDIR/"
+
+          echo "Host: $HOST"
+          echo "User: $USER"
+          echo "Remote dir: $RDIR"
+          echo "Password length: ${#PASS}"
+
+          # Test connection with a simple upload
+          echo "=== Testing FTP upload ==="
+          echo "test" > /tmp/ftp_test.txt
+          if curl -v --ftp-pasv --max-time 30 -T /tmp/ftp_test.txt "ftp://$HOST/${RDIR}ftp_test.txt" --user "$USER:$PASS" --ftp-create-dirs 2>&1; then
+            echo "=== Connection OK! ==="
+          else
+            echo "=== Connection FAILED! ==="
+            exit 1
+          fi
+
+          # Now deploy everything
+          echo "=== Deploying all files ==="
+          cd dist
+          FILES=0
+          FAILS=0
+
+          find . -type f | while IFS= read -r file; do
+            rel="${file#./}"
+            if curl -s --ftp-pasv --max-time 120 -T "$rel" "ftp://$HOST/${RDIR}$rel" --user "$USER:$PASS" --ftp-create-dirs; then
+              echo "[OK] $rel"
+            else
+              echo "[FAIL] $rel"
+              exit 1
+            fi
+          done
+
+          echo "=== Deploy complete ==="
