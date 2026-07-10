@@ -30,10 +30,10 @@ jobs:
           REMOTE_DIR: ${{ secrets.HOSTINGER_REMOTE_DIR }}
         run: |
           set -e
-          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          sudo apt-get update -qq && sudo apt-get install -y -qq ncftp
           echo "=== dist/ contents ==="
-          ls -la dist/
-          echo "=== Deploying ==="
+          ls dist/
+          echo "=== Deploying to $REMOTE_DIR ==="
           cd dist
-          lftp -c "set ftp:ssl-allow yes; set ssl:verify-certificate no; open -u $FTP_USER,$FTP_PASS $FTP_HOST; mirror -R -v -P 5 ./ $REMOTE_DIR"
+          ncftpput -R -v -u "$FTP_USER" -p "$FTP_PASS" "$FTP_HOST" "$REMOTE_DIR" .
           echo "=== Deploy complete ==="
