@@ -97,6 +97,9 @@ function processSSI(html, pageName) {
   html = html.replace(/<!--#include\s+whatsapp\s+-->/g, partials.get('whatsapp') || '');
   html = html.replace(/<!--#include\s+scripts\s+-->/g, partials.get('scripts') || '');
 
+  // Inject Google Search Console verification into <head> (must be in head, not body)
+  html = html.replace('</head>', '  <meta name="google-site-verification" content="SBs9AoeRsqG3Ko1T1CAjNcJQpqcD031zC8GWustQ4V8">\n</head>');
+
   return html;
 }
 
