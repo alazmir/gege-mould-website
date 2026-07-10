@@ -139,10 +139,25 @@
       selectedFiles.forEach(f => fd.append('files', f));
 
       const API_BASE = window.GEGE_API_BASE || '/api';
-      const res = await fetch(`${API_BASE}/rfq`, {
+
+      // Retry-enabled fetch — handles Render cold starts by retrying once after 5 seconds
+      async function fetchWithRetry(url, options, retriesLeft) {
+        try {
+          return await fetch(url, options);
+        } catch (err) {
+          if (retriesLeft > 0) {
+            btn.textContent = 'Waking server…';
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            return await fetchWithRetry(url, options, retriesLeft - 1);
+          }
+          throw err;
+        }
+      }
+
+      const res = await fetchWithRetry(`${API_BASE}/rfq`, {
         method: 'POST',
         body: fd,
-      });
+      }, 1);
       const result = await res.json();
 
       if (res.ok && result.success) {

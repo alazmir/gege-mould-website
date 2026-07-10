@@ -24,10 +24,10 @@ jobs:
 
       - name: Deploy to Hostinger via FTP
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-          lftp -e "
+          echo "Connecting to ${{ secrets.HOSTINGER_FTP_HOST }} ..."
+          lftp -c "
             set ftp:ssl-allow yes;
-            mirror --reverse --delete --verbose ./dist/ ${{ secrets.HOSTINGER_REMOTE_DIR }};
-            quit
-          " -u "${{ secrets.HOSTINGER_FTP_USER }}","${{ secrets.HOSTINGER_FTP_PASSWORD }}" \
-            ${{ secrets.HOSTINGER_FTP_HOST }}
+            set ssl:verify-certificate no;
+            open -u '${{ secrets.HOSTINGER_FTP_USER }}','${{ secrets.HOSTINGER_FTP_PASSWORD }}' ${{ secrets.HOSTINGER_FTP_HOST }};
+            mirror -R -v -e ./dist/ ${{ secrets.HOSTINGER_REMOTE_DIR }};
+          " && echo "Deploy complete." || echo "Deploy failed."

@@ -156,6 +156,44 @@ If preferred, deploy the HTML/CSS/JS to any static host (Netlify, Cloudflare Pag
 
 Place this `<script>` tag **before** `<script src="js/main.js"></script>` in every page with a form.
 
+### Option D: GitHub Actions → Hostinger FTP (Recommended for Hostinger)
+
+This project includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and deploys the `dist/` folder to Hostinger via FTP on every push to `main`.
+
+**One-time setup:**
+
+1. Push this repo to GitHub
+2. Go to **Settings → Secrets and variables → Actions** in your GitHub repo
+3. Add these **Repository Secrets:**
+
+   | Secret Name | Value |
+   |---|---|
+   | `HOSTINGER_FTP_HOST` | Your Hostinger FTP server (e.g. `ftp.gegemould.com` or the IP from hPanel) |
+   | `HOSTINGER_FTP_USER` | FTP username from Hostinger → FTP Accounts |
+   | `HOSTINGER_FTP_PASSWORD` | FTP password |
+   | `HOSTINGER_REMOTE_DIR` | `public_html/` (or the full path shown in hPanel) |
+
+4. That's it — any push to `main` will trigger a deploy. You can also trigger manually from the **Actions** tab → **Deploy to Hostinger** → **Run workflow**.
+
+> **How it works:** GitHub Actions checks out the repo, runs `node build.js` to rebuild `dist/`, then uploads everything inside `dist/` directly to your Hostinger `public_html/` via FTP. No more manual ZIP uploads.
+
+### Keeping Render Backend Warm (Cold Start Prevention)
+
+Render's free tier puts services to sleep after 15 minutes of inactivity. The first request after sleep triggers a **cold start** that can take 30–60 seconds. The frontend form submission includes retry logic (retries once after 5 seconds), but the best way to avoid cold starts entirely is **UptimeRobot** — a free uptime monitoring service that pings your backend every 5 minutes.
+
+#### Setup Instructions
+
+1. **Create a free UptimeRobot account** at [uptimerobot.com](https://uptimerobot.com)
+2. **Add a new monitor:**
+   - **Monitor Type:** `HTTP(s)`
+   - **Friendly Name:** `Gege Mould API`
+   - **URL:** `https://gege-mould-website-1.onrender.com/api/health`
+   - **Monitoring Interval:** `5 minutes`
+   - **Timeout:** `30 seconds`
+3. **Save** — UptimeRobot will now ping the `/api/health` endpoint every 5 minutes, keeping the Render service from sleeping.
+
+> **Note:** The `/api/health` endpoint at `GET /api/health` returns `{"status":"ok","timestamp":"..."}` — it's lightweight and designed for this purpose. Forms also have built-in retry logic as a fallback if the server is cold-starting.
+
 ---
 
 ## Design & Tech Stack

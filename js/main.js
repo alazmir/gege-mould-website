@@ -348,11 +348,30 @@
       };
 
       var apiBase = window.GEGE_API_BASE || '/api';
-      fetch(apiBase + '/quote', {
+
+      // Retry-enabled fetch — handles Render cold starts by retrying once after 5 seconds
+      function fetchWithRetry(url, options, retriesLeft, onRetry) {
+        onRetry = onRetry || 0;
+        return fetch(url, options).catch(function(err) {
+          if (retriesLeft > 0) {
+            if (onRetry === 0 && submitBtn) {
+              submitBtn.textContent = 'Waking server…';
+            }
+            return new Promise(function(resolve) {
+              setTimeout(function() {
+                resolve(fetchWithRetry(url, options, retriesLeft - 1, 1));
+              }, 5000);
+            });
+          }
+          throw err;
+        });
+      }
+
+      fetchWithRetry(apiBase + '/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      })
+      }, 1)
       .then(function(res){ return res.json(); })
       .then(function(data){
         if (submitBtn) { submitBtn.textContent = originalText; submitBtn.disabled = false; }
