@@ -37,3 +37,6 @@ build/
 # Screenshots (keep repo clean)
 screenshots/
 backend/screenshots/
+
+# Deployment ZIPs
+*.zip
