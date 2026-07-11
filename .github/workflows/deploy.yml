@@ -36,38 +36,48 @@ jobs:
           PASS="$FTP_PASS"
           RDIR="$REMOTE_DIR"
 
-          # Ensure REMOTE_DIR ends with /
-          [[ "$RDIR" != */ ]] && RDIR="$RDIR/"
-
-          echo "Host: $HOST"
-          echo "User: $USER"
+          echo "============================================"
+          echo "FTP CONFIGURATION"
+          echo "============================================"
+          echo "Host:       $HOST"
+          echo "User:       $USER"
           echo "Remote dir: $RDIR"
-          echo "Password length: ${#PASS}"
+          echo "Pass len:   ${#PASS}"
+          echo "============================================"
 
-          # Test connection with a simple upload
-          echo "=== Testing FTP upload ==="
-          echo "test" > /tmp/ftp_test.txt
-          if curl -v --ftp-pasv --max-time 30 -T /tmp/ftp_test.txt "ftp://$HOST/${RDIR}ftp_test.txt" --user "$USER:$PASS" --ftp-create-dirs 2>&1; then
-            echo "=== Connection OK! ==="
-          else
-            echo "=== Connection FAILED! ==="
+          # TCP-level check — can we even reach the FTP port?
+          echo "=== TCP connectivity check ==="
+          timeout 10 bash -c "echo >/dev/tcp/$HOST/21" 2>&1 && echo "TCP port 21 REACHABLE" || {
+            echo "TCP port 21 UNREACHABLE — check HOSTINGER_FTP_HOST"
             exit 1
-          fi
+          }
 
-          # Now deploy everything
-          echo "=== Deploying all files ==="
+          # Try FTP login
+          echo "=== FTP login test ==="
+          curl -v --ftp-pasv --max-time 15 -Q "PWD" "ftp://$HOST/" --user "$USER:$PASS" 2>&1 || {
+            echo "FTP login FAILED — check HOSTINGER_FTP_USER and HOSTINGER_FTP_PASSWORD"
+            exit 1
+          }
+
+          # Deploy
+          echo "=== Uploading dist/ ==="
           cd dist
-          FILES=0
-          FAILS=0
+          FINDFILE=$(mktemp)
+          find . -type f > "$FINDFILE"
+          TOTAL=$(wc -l < "$FINDFILE")
+          echo "Files to upload: $TOTAL"
+          COUNT=0
 
-          find . -type f | while IFS= read -r file; do
+          while IFS= read -r file; do
+            COUNT=$((COUNT + 1))
             rel="${file#./}"
-            if curl -s --ftp-pasv --max-time 120 -T "$rel" "ftp://$HOST/${RDIR}$rel" --user "$USER:$PASS" --ftp-create-dirs; then
-              echo "[OK] $rel"
-            else
-              echo "[FAIL] $rel"
+            echo "[$COUNT/$TOTAL] $rel"
+            curl -s --ftp-pasv --max-time 120 -T "$rel" "ftp://$HOST/$RDIR$rel" --user "$USER:$PASS" --ftp-create-dirs || {
+              echo "FAILED at: $rel"
               exit 1
-            fi
-          done
+            }
+          done < "$FINDFILE"
 
-          echo "=== Deploy complete ==="
+          echo "============================================"
+          echo "Deploy complete — $TOTAL files uploaded"
+          echo "============================================"
