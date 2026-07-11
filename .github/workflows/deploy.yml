@@ -22,62 +22,14 @@ jobs:
       - name: Build dist/
         run: node build.js
 
+      - name: Install FTP deploy tool
+        run: npm install basic-ftp
+
       - name: Deploy to Hostinger via FTP
         env:
           FTP_HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
           FTP_USER: ${{ secrets.HOSTINGER_FTP_USER }}
           FTP_PASS: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           REMOTE_DIR: ${{ secrets.HOSTINGER_REMOTE_DIR }}
-        run: |
-          set -e
-
-          HOST="$FTP_HOST"
-          USER="$FTP_USER"
-          PASS="$FTP_PASS"
-          RDIR="$REMOTE_DIR"
-
-          echo "============================================"
-          echo "FTP CONFIGURATION"
-          echo "============================================"
-          echo "Host:       $HOST"
-          echo "User:       $USER"
-          echo "Remote dir: $RDIR"
-          echo "Pass len:   ${#PASS}"
-          echo "============================================"
-
-          # TCP-level check — can we even reach the FTP port?
-          echo "=== TCP connectivity check ==="
-          timeout 10 bash -c "echo >/dev/tcp/$HOST/21" 2>&1 && echo "TCP port 21 REACHABLE" || {
-            echo "TCP port 21 UNREACHABLE — check HOSTINGER_FTP_HOST"
-            exit 1
-          }
-
-          # Try FTP login
-          echo "=== FTP login test ==="
-          curl -v --ftp-pasv --max-time 15 -Q "PWD" "ftp://$HOST/" --user "$USER:$PASS" 2>&1 || {
-            echo "FTP login FAILED — check HOSTINGER_FTP_USER and HOSTINGER_FTP_PASSWORD"
-            exit 1
-          }
-
-          # Deploy
-          echo "=== Uploading dist/ ==="
-          cd dist
-          FINDFILE=$(mktemp)
-          find . -type f > "$FINDFILE"
-          TOTAL=$(wc -l < "$FINDFILE")
-          echo "Files to upload: $TOTAL"
-          COUNT=0
-
-          while IFS= read -r file; do
-            COUNT=$((COUNT + 1))
-            rel="${file#./}"
-            echo "[$COUNT/$TOTAL] $rel"
-            curl -s --ftp-pasv --max-time 120 -T "$rel" "ftp://$HOST/$RDIR$rel" --user "$USER:$PASS" --ftp-create-dirs || {
-              echo "FAILED at: $rel"
-              exit 1
-            }
-          done < "$FINDFILE"
-
-          echo "============================================"
-          echo "Deploy complete — $TOTAL files uploaded"
-          echo "============================================"
+          LOCAL_DIR: dist
+        run: node deploy-ftp.js
