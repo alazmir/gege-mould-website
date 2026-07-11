@@ -22,24 +22,43 @@ jobs:
       - name: Build dist/
         run: node build.js
 
-      - name: Install FTP deploy tool
-        run: npm install basic-ftp
-
-      - name: Deploy to Hostinger via FTP
+      - name: Deploy to Hostinger via FTPS
         env:
           FTP_HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
           FTP_USER: ${{ secrets.HOSTINGER_FTP_USER }}
           FTP_PASS: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           REMOTE_DIR: ${{ secrets.HOSTINGER_REMOTE_DIR }}
-          LOCAL_DIR: dist
         run: |
-          # Verify secrets are set (masked output)
-          echo "FTP_HOST present: $([[ -n "$FTP_HOST" ]] && echo YES || echo 'NO — SECRET NOT SET')"
-          echo "FTP_USER present: $([[ -n "$FTP_USER" ]] && echo YES || echo 'NO — SECRET NOT SET')"
-          echo "FTP_PASS present: $([[ -n "$FTP_PASS" ]] && echo YES || echo 'NO — SECRET NOT SET')"
-          echo "REMOTE_DIR present: $([[ -n "$REMOTE_DIR" ]] && echo YES || echo 'NO — SECRET NOT SET')"
-          echo "FTP_HOST length: ${#FTP_HOST}"
-          echo "FTP_USER length: ${#FTP_USER}"
-          echo "FTP_PASS length: ${#FTP_PASS}"
+          set -e
+
+          echo "=== Checking secrets ==="
+          [[ -n "$FTP_HOST" ]] && echo "FTP_HOST: YES (${#FTP_HOST} chars)" || { echo "FTP_HOST: MISSING"; exit 1; }
+          [[ -n "$FTP_USER" ]] && echo "FTP_USER: YES (${#FTP_USER} chars)" || { echo "FTP_USER: MISSING"; exit 1; }
+          [[ -n "$FTP_PASS" ]] && echo "FTP_PASS: YES (${#FTP_PASS} chars)" || { echo "FTP_PASS: MISSING"; exit 1; }
+          [[ -n "$REMOTE_DIR" ]] && echo "REMOTE_DIR: YES (${#REMOTE_DIR} chars)" || { echo "REMOTE_DIR: MISSING"; exit 1; }
+
           echo ""
-          node deploy-ftp.js
+          echo "=== Installing lftp ==="
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+          echo ""
+          echo "=== Resolving FTP host ==="
+          dig +short "$FTP_HOST" || nslookup "$FTP_HOST" || true
+
+          echo ""
+          echo "=== Deploying via explicit FTPS ==="
+          cd dist
+          lftp -c "
+            set ftp:ssl-auth TLS;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate no;
+            set net:timeout 30;
+            set net:max-retries 2;
+            debug 3;
+            open -u $FTP_USER,$FTP_PASS $FTP_HOST;
+            ls $REMOTE_DIR;
+            mirror -R -v ./ $REMOTE_DIR;
+          "
+          echo ""
+          echo "=== DEPLOY COMPLETE ==="
